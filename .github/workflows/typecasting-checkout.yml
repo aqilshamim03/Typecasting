@@ -1,30 +1,21 @@
-name: Python Typecasting Pytest Workflow
+steps:
+  - uses: actions/checkout@v4
 
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+  - name: Run shell script
+    shell: bash
+    run: |
+      chmod +x scripts/hello.sh
+      ./scripts/hello.sh
 
-jobs:
-  test:
-    runs-on: [self-hosted, windows, x64]
+  - name: Set up Python
+    uses: actions/setup-python@v5
+    with:
+      python-version: '3.10'
 
+  - name: Install pytest
+    run: |
+      python -m pip install --upgrade pip
+      python -m pip install pytest
 
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install pytest
-        run: |
-          python -m pip install --upgrade pip
-          pip install pytest
-
-      - name: Run tests
-        run: pytest
+  - name: Run tests
+    run: python -m pytest
